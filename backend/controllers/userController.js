@@ -11,15 +11,15 @@ const createToken = (user) => {
 // Signup Function
 exports.Signup = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { fullnames,email,phone ,password, role } = req.body;
 
         // Validate input
-        if (!email || !password || !role) {
+        if (!fullnames ||!email ||!phone || !password || !role) {
             return res.status(400).json({ error: "All fields must be filled" });
         }
 
         // Create user
-        const user = await User.signup(email, password, role);
+        const user = await User.signup(fullnames,email, phone ,password, role);
         const token = createToken(user);
 
         res.status(200).json({ token, user });
@@ -42,7 +42,7 @@ exports.Login = async (req, res) => {
         const user = await User.login(email, password);
         const token = createToken(user);
 
-        res.status(200).json({ email, token, role: user.role });
+        res.status(200).json({ email, token, role: user.role , fullnames: user.fullnames , phone: user.phone});
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
